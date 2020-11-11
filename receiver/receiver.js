@@ -5,20 +5,25 @@ webSocket.onmessage = (event) => {
 
 function handleSignallingData(data) {
     switch (data.type) {
-        case "answer":
-            peerConn.setRemoteDescription(data.answer)
+        case "offer":
+            peerConn.setRemoteDescription(data.offer)
+            createAndSendAnswer()
             break
         case "candidate":
             peerConn.addIceCandidate(data.candidate)
     }
 }
 
-let username;
-function sendUsername() {
-    username = document.getElementById("username-input").value;
-    sendData({
-        type: "store_user"
-    })
+function createAndSendAnswer() {
+    peerConn.createAnswer((answer) => {
+        peerConn.setLocalDescription(answer)
+        sendData({
+            type: "send_answer",
+            answer: answer
+        })
+    }, error => {
+        console.log(error);
+    }) 
 }
 
 function sendData(data) {
@@ -28,7 +33,10 @@ function sendData(data) {
 
 let localStream;
 let peerConn;
-function startCall() {
+let username;
+
+function joinCall() {
+    username = document.getElementById("username-input").nodeValue;
     document.getElementById("video-call-div").style.display = "inline"
 
     navigator.getUserMedia({
@@ -73,31 +81,22 @@ function startCall() {
         peerConn.onicecandidate = ((e) => {
             if(e.candidate == null)
             return;
-            sendData({
-                type: "store_candidate",
-                candidate: e.candidate
-            })
+            
+        sendData({
+            type: "send_candidate",
+            candidate: e.candidate
         })
-
-        createAndSendOffer()
+    })
+        
+    sendData({
+        type: "join_call"
+    })
 
     }, (error) => {
         console.log(error);
     })
 }
 
-function createAndSendOffer() {
-    peerConn.createOffer((offer) => {
-        sendData({
-            type: "store_offer",
-            offer: offer
-        })
-
-        peerConn.setLocalDescription(offer)
-    }, (error) => {
-        console.log(error);
-    })   
-}
 
 let isAudio = true;
 function muteAudio() {

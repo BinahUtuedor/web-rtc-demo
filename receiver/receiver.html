@@ -9,8 +9,7 @@
 <body>
     <div>
         <input type="text" id="username-input" placeholder="Enter username..."> <br>
-        <button onclick="sendUsername()">Send</button>
-        <button onclick="startCall()">Start call</button>
+        <button onclick="joinCall()">Join call</button>
     </div>
     <div id="video-call-div">
         <video muted id="local-video" autoplay></video>
@@ -20,6 +19,6 @@
             <button onclick="muteAudio()">Mute Audio</button>
         </div>
     </div>
-    <script src="./sender.js"></script>
+    <script src="./receiver.js"></script>
 </body>
 </html>
