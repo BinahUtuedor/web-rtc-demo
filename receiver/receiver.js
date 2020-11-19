@@ -36,8 +36,9 @@ let peerConn;
 let username;
 
 function joinCall() {
-    username = document.getElementById("username-input").nodeValue;
-    document.getElementById("video-call-div").style.display = "inline"
+    username = document.getElementById("username-input").value;
+    document.getElementById("video-call-div")
+    .style.display = "inline"
 
     navigator.getUserMedia({
         video: {
