@@ -45,9 +45,9 @@ webSocket.on = ('request', (req) => {
                     return
                 }
                 if(user.candidates == null)
-                    user.candidates =[]
+                    user.candidates = []
 
-                user.candidates.psuh(data.candidate)
+                user.candidates.push(data.candidate)
                 break
 
             case "send_answer":
@@ -62,9 +62,13 @@ webSocket.on = ('request', (req) => {
                 break
 
             case "send_candidate":
+                if (user == null) {
+                    return
+                }
+
                 sendData({
                     type: "candidate",
-                    answer: data.candidate
+                    candidate: data.candidate
                 }, user.conn)
                 break
 
@@ -76,13 +80,13 @@ webSocket.on = ('request', (req) => {
                 sendData({
                     type: "offer",
                     offer: user.offer
-                }, conn)
+                }, connection)
 
                 user.candidates.forEach(candidate => {
                     sendData({
                         type: "candidate",
                         candidate: candidate
-                    }, conn)                   
+                    }, connection)                   
                 });
 
                 break

@@ -76,7 +76,8 @@ function joinCall() {
         peerConn.addStream(localStream)
 
         peerConn.onaddstrean = (e) => {
-            document.getElementById("remote-video").srcObject = e.stream;
+            document.getElementById("remote-video")
+            .srcObject = e.stream;
         }
 
         peerConn.onicecandidate = ((e) => {
